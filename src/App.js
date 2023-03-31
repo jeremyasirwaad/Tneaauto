@@ -205,10 +205,44 @@ function App() {
 		"0c455f53-aab0-4877-bc4e-e402f6f040f4"
 	];
 
+	function randomNoRepeats(array) {
+		var copy = array.slice(0);
+		return function () {
+			if (copy.length < 1) {
+				copy = array.slice(0);
+			}
+			var index = Math.floor(Math.random() * copy.length);
+			var item = copy[index];
+			copy.splice(index, 1);
+			return item;
+		};
+	}
+
+	const shufflearray = (array) => {
+		let currentIndex = array.length,
+			randomIndex;
+
+		// While there remain elements to shuffle.
+		while (currentIndex != 0) {
+			// Pick a remaining element.
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex--;
+
+			// And swap it with the current element.
+			[array[currentIndex], array[randomIndex]] = [
+				array[randomIndex],
+				array[currentIndex]
+			];
+		}
+
+		return array;
+	};
+
 	const runfunction = () => {
-		for (let index = 1; index < 10; index++) {
+		for (let index = 1; index < 1289; index++) {
 			const element = file[index];
-			login(element[2], element[3]);
+			login(element[2], "asdf@qwert1");
+			console.log(index);
 		}
 	};
 
@@ -240,28 +274,88 @@ function App() {
 		let vertilimit = 5;
 		let agrlimit = 10;
 
+		var choosereng = randomNoRepeats(eng);
+		var chooserfish = randomNoRepeats(fish);
+		var chooservoc = randomNoRepeats(voc);
+		var chooserverti = randomNoRepeats(verti);
+		var chooseragri = randomNoRepeats(agri);
+
 		for (let index = 0; index < englimit; index++) {
-			let value = eng[Math.floor(Math.random() * eng.length)];
+			let value = choosereng();
 			master.push(value);
 		}
 		for (let index = 0; index < fishlimit; index++) {
-			let value = fish[Math.floor(Math.random() * fish.length)];
+			// let value = randomNoRepeats(fish);
+			let value = chooserfish();
 			master.push(value);
 		}
 		for (let index = 0; index < voclimit; index++) {
-			let value = voc[Math.floor(Math.random() * voc.length)];
+			// let value = randomNoRepeats(voc);
+			let value = chooserfish();
 			master.push(value);
 		}
 		for (let index = 0; index < vertilimit; index++) {
-			let value = verti[Math.floor(Math.random() * verti.length)];
+			// let value = randomNoRepeats(verti);
+			let value = chooserverti();
 			master.push(value);
 		}
 		for (let index = 0; index < agrlimit; index++) {
-			let value = agri[Math.floor(Math.random() * agri.length)];
+			// let value = randomNoRepeats(agri);
+			let value = chooseragri();
 			master.push(value);
 		}
 		console.log(master);
-		makecall(master, sessionid).then((data) => {
+		let shuffed = shufflearray(master);
+		makecall(shuffed, sessionid).then((data) => {
+			console.log(data);
+		});
+	};
+
+	const getrandomarray2 = (sessionid) => {
+		let master = [];
+		let englimit = 10;
+		let fishlimit = 3;
+		let voclimit = 5;
+		let vertilimit = 5;
+		let agrlimit = 10;
+
+		for (
+			let index = 0;
+			index < englimit + fishlimit + voclimit + vertilimit + agrlimit;
+			index++
+		) {
+			var engcount = 0;
+			var fishcount = 0;
+			var voccount = 0;
+			var verticount = 0;
+			var agricount = 0;
+			if (engcount < englimit) {
+				let value = eng[Math.floor(Math.random() * eng.length)];
+				master.push(value);
+			}
+			if (fishcount < fishlimit) {
+				let value2 = fish[Math.floor(Math.random() * fish.length)];
+				master.push(value2);
+			}
+
+			if (voccount < voclimit) {
+				let value3 = voc[Math.floor(Math.random() * voc.length)];
+				master.push(value3);
+			}
+
+			if (verticount < vertilimit) {
+				let value4 = verti[Math.floor(Math.random() * verti.length)];
+				master.push(value4);
+			}
+
+			if (agricount < agrlimit) {
+				let value5 = agri[Math.floor(Math.random() * agri.length)];
+				master.push(value5);
+			}
+		}
+		console.log(master);
+		let shuffed = shufflearray(master);
+		makecall(shuffed, sessionid).then((data) => {
 			console.log(data);
 		});
 	};
@@ -303,10 +397,16 @@ function App() {
 			/>
 			<button
 				onClick={() => {
-					getrandomarray();
+					var chooser = randomNoRepeats(eng);
+					console.log(chooser());
+					console.log(chooser());
+					console.log(chooser());
+
+					// runfunction();
+					// login(file[1][2], file[1][3]);
 				}}
 			>
-				Automate
+				Shuffle and Push
 			</button>
 			<button
 				onClick={() => {
@@ -314,7 +414,7 @@ function App() {
 					// login(file[1][2], file[1][3]);
 				}}
 			>
-				Login
+				Shuffle and Push
 			</button>
 		</div>
 	);
